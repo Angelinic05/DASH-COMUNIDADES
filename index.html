@@ -12,22 +12,20 @@
 <body>
     <div class="container">
         <!-- 1. Embudo de Conversión -->
-        <div class="box">
-            <h2>Embudo de Conversión</h2>
-            <div id="funnelChart"></div> <!-- Asegúrate de que esto sea un div -->
-        </div>
+            <div class="box">
+                <h2>EMBUDO DE CONVERSIÓN</h2>
+                <div id="funnelChart"></div> <!-- Asegúrate de que esto sea un div -->
+            </div>
 
+            <!-- 2. Barras de Progreso -->
         <!-- 2. Barras de Progreso -->
-        <div class="box">
-            <div class="progress-bars">
-                <div class="box">
-                    <h2>PARTICIPANTES EN COMUNIDADES</h2>
-                    <div class="progress-bars" id="progressBarsContainer">
-                        <!-- Las barras de progreso se generarán aquí -->
-                    </div>
+            <div class="box">
+                <h2 style="margin-bottom: 50px;">PARTICIPANTES EN COMUNIDADES</h2>
+                <div class="progress-bars-container" id="progressBarsContainer">
+                    <!-- Las barras de progreso se generarán aquí -->
                 </div>
             </div>
-        </div>
+
 
         <div class="box2">
             <div class="container-bottom">
@@ -57,25 +55,42 @@
         }
 
         function createProgressBars(leads) {
-            const container = document.getElementById('progressBarsContainer');
-            container.innerHTML = ''; // Limpiar el contenedor
+    const container = document.getElementById('progressBarsContainer');
+    container.innerHTML = ''; // Limpiar el contenedor
 
-            leads.forEach(lead => {
-                const { nombre, participantes, maximo, porcentaje } = lead;
-                const progressWidth = (porcentaje * 100).toFixed(2) + '%'; // Calcular el ancho de la barra
+    // Crear dos contenedores para las columnas
+    const column1 = document.createElement('div');
+    const column2 = document.createElement('div');
 
-                const progressContainer = document.createElement('div');
-                progressContainer.className = 'progress-container';
-                progressContainer.innerHTML = `
-                    <span class="progress-title">${nombre}</span>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: ${progressWidth}; background: linear-gradient(to right, #0188eb, #9d46f4);">${participantes || 0}</div>
-                    </div>
-                    <span class="progress-title">${(porcentaje * 100).toFixed(2)}%</span>
-                `;
-                container.appendChild(progressContainer);
-            });
+    column1.className = 'progress-bars';
+    column2.className = 'progress-bars';
+
+    leads.forEach((lead, index) => {
+        const { nombre, participantes, maximo, porcentaje } = lead;
+        const progressWidth = (porcentaje * 100).toFixed(2) + '%'; // Calcular el ancho de la barra
+
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'progress-container';
+        progressContainer.innerHTML = `
+            <span class="progress-title">${nombre}</span>
+            <div class="progress-bar">
+                <div class="progress" style="width: ${progressWidth}; background: linear-gradient(to right, #0188eb, #9d46f4);">${participantes || 0}</div>
+            </div>
+            <span class="progress-title">${(porcentaje * 100).toFixed(2)}%</span>
+        `;
+
+        // Alternar entre las dos columnas
+        if (index < 5) {
+            column1.appendChild(progressContainer);
+        } else {
+            column2.appendChild(progressContainer);
         }
+    });
+
+    // Agregar las columnas al contenedor principal
+    container.appendChild(column1);
+    container.appendChild(column2);
+}
 
         async function init() {
             const { leads, views, emailone, emailTwo, embudo } = await fetchData(); // Obtener embudo también
@@ -141,7 +156,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'CORREO #1', // Título del gráfico
+                    text: 'MÉTRICAS CORREO #1', // Título del gráfico
                     font: {
                         size: 20, // Tamaño de la fuente del título
                         color: '#FFFFFF' // Color del texto del título
@@ -226,7 +241,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Gráfico de Email Two', // Título del gráfico
+                    text: 'MÉTRICAS CORREO #2', // Título del gráfico
                     font: {
                         size: 20, // Tamaño de la fuente del título
                         color: '#FFFFFF' // Color del texto del título
@@ -331,7 +346,7 @@ function createLineChartViews(views) {
     });
 }
 
-        function createFunnelChart(embudoData) {
+function createFunnelChart(embudoData) {
     const options = {
         series: [{
             name: "Datos",
@@ -339,7 +354,7 @@ function createLineChartViews(views) {
         }],
         chart: {
             type: 'bar',
-            height: 350,
+            height: 300,
             dropShadow: {
                 enabled: true,
             },
@@ -363,7 +378,10 @@ function createLineChartViews(views) {
         dataLabels: {
             enabled: true,
             formatter: function (val, opt) {
-                return opt.w.globals.labels[opt.dataPointIndex];
+                // Concatenar la etiqueta y el valor
+                const label = opt.w.globals.labels[opt.dataPointIndex];
+                const value = val; // El valor actual
+                return `${label}: ${value}`; // Formato "Etiqueta: Valor"
             },
             dropShadow: {
                 enabled: true,
@@ -380,6 +398,7 @@ function createLineChartViews(views) {
         },
     };
 
+    // Aquí deberías inicializar el gráfico con las opciones
     const chart = new ApexCharts(document.querySelector("#funnelChart"), options);
     chart.render();
 }
