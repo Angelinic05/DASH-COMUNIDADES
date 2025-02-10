@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="Style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 1. Embudo de Conversión -->
+        <div class="box">
+            <h2>Embudo de Conversión</h2>
+            <div id="funnelChart"></div> <!-- Asegúrate de que esto sea un div -->
+        </div>
+
+        <!-- 2. Barras de Progreso -->
+        <div class="box">
+            <div class="progress-bars">
+                <div class="box">
+                    <h2>PARTICIPANTES EN COMUNIDADES</h2>
+                    <div class="progress-bars" id="progressBarsContainer">
+                        <!-- Las barras de progreso se generarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box2">
+            <div class="container-bottom">
+                <div class="box">
+                    <canvas id="LineChartViews"></canvas>
+                </div>
+                <div class="box">
+                    <canvas id="LineChartEmailOne"></canvas>
+                </div>
+                <div class="box">
+                    <canvas id="LineChartEmailTwo"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function fetchData() {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbzvycxwGpzPAHNX0G6d2O4j3Y_TZTrVjWlBscUmQ-Pz8KvhH4Og43QjyPnAnDiFmrCumw/exec');
+            const data = await response.json();
+            return { 
+                leads: data.leads, 
+                views: data.views, 
+                emailone: data.emailone, 
+                emailTwo: data.emailTwo, 
+                embudo: data.embudo // Asegúrate de incluir embudo
+            };
+        }
+
+        function createProgressBars(leads) {
+            const container = document.getElementById('progressBarsContainer');
+            container.innerHTML = ''; // Limpiar el contenedor
+
+            leads.forEach(lead => {
+                const { nombre, participantes, maximo, porcentaje } = lead;
+                const progressWidth = (porcentaje * 100).toFixed(2) + '%'; // Calcular el ancho de la barra
+
+                const progressContainer = document.createElement('div');
+                progressContainer.className = 'progress-container';
+                progressContainer.innerHTML = `
+                    <span class="progress-title">${nombre}</span>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: ${progressWidth}; background: linear-gradient(to right, #0188eb, #9d46f4);">${participantes || 0}</div>
+                    </div>
+                    <span class="progress-title">${(porcentaje * 100).toFixed(2)}%</span>
+                `;
+                container.appendChild(progressContainer);
+            });
+        }
+
+        async function init() {
+            const { leads, views, emailone, emailTwo, embudo } = await fetchData(); // Obtener embudo también
+            createProgressBars(leads);
+            createLineChartViews(views); // Pasar los datos de vistas a la función
+            createLineChartEmailOne(emailone); // Pasar los datos de emailone a la función
+            createLineChartEmailTwo(emailTwo); // Pasar los datos de emailTwo a la función
+            createFunnelChart(embudo); // Pasar los datos del embudo a la función
+        }
+
+        init(); // Llamar a la función de inicialización
+
+        let lineChartEmailOne, lineChartEmailTwo, lineChartViews;
+
+        function destroyChart(chart) {
+            if (chart) {
+                chart.destroy();
+            }
+        }
+
+        function createLineChartEmailOne(emailData) {
+    const ctx = document.getElementById("LineChartEmailOne").getContext("2d");
+    destroyChart(lineChartEmailOne);
+    
+    // Extraer las fechas y los datos de enviados, apertura y clics
+    const labels = emailData.map(email => email.fecha || "Sin Fecha");
+    const enviadosData = emailData.map(email => email.enviados || 0); // Usar 0 si no hay datos
+    const aperturaData = emailData.map(email => email.apertura || 0); // Usar 0 si no hay datos
+    const clicsData = emailData.map(email => email.clics || 0); // Usar 0 si no hay datos
+
+    lineChartEmailOne = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Clics",
+                    borderColor: "#59b876",
+                    backgroundColor: "rgba(89,184,118,0.2)",
+                    data: clicsData,
+                    fill: true
+                },
+                {
+                    label: "Apertura",
+                    borderColor: "#3c6fe2",
+                    backgroundColor: "rgba(60,111,226,0.2)",
+                    data: aperturaData,
+                    fill: true
+                },
+                
+                {
+                    label: "Enviados",
+                    borderColor: "#cb095a",
+                    backgroundColor: "rgba(203,9,90,0.2)",
+                    data: enviadosData,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'CORREO #1', // Título del gráfico
+                    font: {
+                        size: 20, // Tamaño de la fuente del título
+                        color: '#FFFFFF' // Color del texto del título
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#FFFFFF' // Color del texto del eje Y
+                    },
+                    title: {
+                        display: true,
+                        text: 'Cantidad',
+                        color: '#FFFFFF' // Color del texto del título del eje Y
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#FFFFFF' // Color del texto del eje X
+                    },
+                    title: {
+                        display: true,
+                        text: 'Fechas',
+                        color: '#FFFFFF' // Color del texto del título del eje X
+                    }
+                }
+            }
+        }
+    });
+}
+
+        function createLineChartEmailTwo(emailTwoData) {
+    const ctx = document.getElementById("LineChartEmailTwo").getContext("2d");
+    destroyChart(lineChartEmailTwo);
+    
+    // Verificar si emailTwoData tiene datos
+    if (!emailTwoData || emailTwoData.length === 0) {
+        console.error("No hay datos de Email Two disponibles.");
+        return; // Salir si no hay datos
+    }
+
+    // Extraer las fechas y los datos de enviados, apertura y clics
+    const labels = emailTwoData.map(email => email.fecha || "Sin Fecha");
+    const enviadosData = emailTwoData.map(email => email.enviados || 0); // Usar 0 si no hay datos
+    const aperturaData = emailTwoData.map(email => email.apertura || 0); // Usar 0 si no hay datos
+    const clicsData = emailTwoData.map(email => email.clics || 0); // Usar 0 si no hay datos
+
+    lineChartEmailTwo = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+            {
+                    label: "Clics",
+                    borderColor: "#ea7329",
+                    backgroundColor: "rgba(231,105,39,0.2)",
+                    data: clicsData,
+                    fill: true
+                },
+                {
+                    label: "Apertura",
+                    borderColor: "#f448f0",
+                    backgroundColor: "rgba(248,65,247,0.2)",
+                    data: aperturaData,
+                    fill: true
+                },
+                
+                {
+                    label: "Enviados",
+                    borderColor: "#00dffb",
+                    backgroundColor: "rgba(0,223,251,0.2)",
+                    data: enviadosData,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Gráfico de Email Two', // Título del gráfico
+                    font: {
+                        size: 20, // Tamaño de la fuente del título
+                        color: '#FFFFFF' // Color del texto del título
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#FFFFFF' // Color del texto del eje Y
+                    },
+                    title: {
+                        display: true,
+                        text: 'Cantidad',
+                        color: '#FFFFFF' // Color del texto del título del eje Y
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#FFFFFF' // Color del texto del eje X
+                    },
+                    title: {
+                        display: true,
+                        text: 'Fechas',
+                        color: '#FFFFFF' // Color del texto del título del eje X
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createLineChartViews(views) {
+    const ctx = document.getElementById("LineChartViews").getContext("2d");
+    destroyChart(lineChartViews);
+    
+    // Extraer las fechas y los datos de registro y gracias
+    const labels = views.map(view => view.fecha);
+    const registroData = views.map(view => view.registro || 0); // Usar 0 si no hay datos
+    const graciasData = views.map(view => view.gracias || 0); // Usar 0 si no hay datos
+
+    lineChartViews = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Gracias",
+                    borderColor: "#fcce29",
+                    backgroundColor: "rgba(252,206,41,0.2)",
+                    data: graciasData,
+                    fill: true
+                },
+                {
+                    label: "Registro",
+                    borderColor: "#aa26fe",
+                    backgroundColor: "rgba(170,38,254,0.2)",
+                    data: registroData,
+                    fill: true
+                }
+                
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'VISITAS', // Título del gráfico
+                    font: {
+                        size: 20, // Tamaño de la fuente del título
+                        color: '#FFFFFF' // Color del texto del título
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#FFFFFF' // Color del texto del eje Y
+                    },
+                    title: {
+                        display: true,
+                        text: 'Cantidad',
+                        color: '#FFFFFF' // Color del texto del título del eje Y
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#FFFFFF' // Color del texto del eje X
+                    },
+                    title: {
+                        display: true,
+                        text: 'Fechas',
+                        color: '#FFFFFF' // Color del texto del título del eje X
+                    }
+                }
+            }
+        }
+    });
+}
+
+        function createFunnelChart(embudoData) {
+    const options = {
+        series: [{
+            name: "Datos",
+            data: embudoData.map(item => item.dato || 0), // Usar 0 si no hay datos
+        }],
+        chart: {
+            type: 'bar',
+            height: 350,
+            dropShadow: {
+                enabled: true,
+            },
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 0,
+                horizontal: true,
+                distributed: true,
+                barHeight: '80%',
+                isFunnel: true,
+            },
+        },
+        colors: [
+            '#ef852e',
+            '#ee315c',
+            '#e41aaa',
+            '#9604bf',
+            '#6500f9'
+        ],
+        dataLabels: {
+            enabled: true,
+            formatter: function (val, opt) {
+                return opt.w.globals.labels[opt.dataPointIndex];
+            },
+            dropShadow: {
+                enabled: true,
+            },
+        },
+        title: {
+            align: 'middle',
+        },
+        xaxis: {
+            categories: embudoData.map(item => item.etiqueta), // Usar las etiquetas del embudo
+        },
+        legend: {
+            show: false,
+        },
+    };
+
+    const chart = new ApexCharts(document.querySelector("#funnelChart"), options);
+    chart.render();
+}
+    </script>
+</body>
+</html>
