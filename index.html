@@ -11,18 +11,17 @@
 </head>
 <body>
     <div class="container">
-        <!-- 1. Embudo de Conversión -->
+
             <div class="box">
                 <h2>EMBUDO DE CONVERSIÓN</h2>
-                <div id="funnelChart"></div> <!-- Asegúrate de que esto sea un div -->
+                <div id="funnelChart"></div> 
             </div>
 
-            <!-- 2. Barras de Progreso -->
-        <!-- 2. Barras de Progreso -->
+
             <div class="box">
                 <h1>PARTICIPANTES EN COMUNIDADES</h1>
                 <div class="progress-bars-container" id="progressBarsContainer">
-                    <!-- Las barras de progreso se generarán aquí -->
+                
                 </div>
             </div>
 
@@ -59,9 +58,9 @@
 
         function createProgressBars(leads) {
     const container = document.getElementById('progressBarsContainer');
-    container.innerHTML = ''; // Limpiar el contenedor
+    container.innerHTML = ''; 
 
-    // Crear dos contenedores para las columnas
+
     const column1 = document.createElement('div');
     const column2 = document.createElement('div');
 
@@ -70,7 +69,7 @@
 
     leads.forEach((lead, index) => {
         const { nombre, participantes, maximo, porcentaje } = lead;
-        const progressWidth = (porcentaje * 100).toFixed(2) + '%'; // Calcular el ancho de la barra
+        const progressWidth = (porcentaje * 100).toFixed(2) + '%'; 
 
         const progressContainer = document.createElement('div');
         progressContainer.className = 'progress-container';
@@ -98,13 +97,13 @@
         async function init() {
             const { leads, views, emailone, emailTwo, embudo } = await fetchData(); // Obtener embudo también
             createProgressBars(leads);
-            createLineChartViews(views); // Pasar los datos de vistas a la función
-            createLineChartEmailOne(emailone); // Pasar los datos de emailone a la función
-            createLineChartEmailTwo(emailTwo); // Pasar los datos de emailTwo a la función
-            createFunnelChart(embudo); // Pasar los datos del embudo a la función
+            createLineChartViews(views); 
+            createLineChartEmailOne(emailone); 
+            createLineChartEmailTwo(emailTwo); 
+            createFunnelChart(embudo); 
         }
 
-        init(); // Llamar a la función de inicialización
+        init(); 
 
         let lineChartEmailOne, lineChartEmailTwo, lineChartViews;
 
@@ -118,11 +117,11 @@
     const ctx = document.getElementById("LineChartEmailOne").getContext("2d");
     destroyChart(lineChartEmailOne);
     
-    // Extraer las fechas y los datos de enviados, apertura y clics
+
     const labels = emailData.map(email => email.fecha || "Sin Fecha");
-    const enviadosData = emailData.map(email => email.enviados || 0); // Usar 0 si no hay datos
-    const aperturaData = emailData.map(email => email.apertura || 0); // Usar 0 si no hay datos
-    const clicsData = emailData.map(email => email.clics || 0); // Usar 0 si no hay datos
+    const enviadosData = emailData.map(email => email.enviados || 0); 
+    const aperturaData = emailData.map(email => email.apertura || 0); 
+    const clicsData = emailData.map(email => email.clics || 0); 
 
     lineChartEmailOne = new Chart(ctx, {
         type: "line",
@@ -159,23 +158,23 @@
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#FFFFFF' // Color del texto del eje Y
+                        color: '#FFFFFF' 
                     },
                     grid: {
-                        color: '#0f113f' // Color gris para la cuadrícula
+                        color: '#0f113f' 
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#FFFFFF' // Color del texto del eje X
+                        color: '#FFFFFF' 
                     },
                     grid: {
-                        color: '#0f113f' // Color gris para la cuadrícula
+                        color: '#0f113f' 
                     }
                 }
             }
         }
-        // No es necesario incluir el plugin ChartDataLabels
+
     });
 }
 
@@ -189,11 +188,11 @@ function createLineChartEmailTwo(emailTwoData) {
         return; // Salir si no hay datos
     }
 
-    // Extraer las fechas y los datos de enviados, apertura y clics
+
     const labels = emailTwoData.map(email => email.fecha || "Sin Fecha");
-    const enviadosData = emailTwoData.map(email => email.enviados || 0); // Usar 0 si no hay datos
-    const aperturaData = emailTwoData.map(email => email.apertura || 0); // Usar 0 si no hay datos
-    const clicsData = emailTwoData.map(email => email.clics || 0); // Usar 0 si no hay datos
+    const enviadosData = emailTwoData.map(email => email.enviados || 0); 
+    const aperturaData = emailTwoData.map(email => email.apertura || 0); 
+    const clicsData = emailTwoData.map(email => email.clics || 0);
 
     lineChartEmailTwo = new Chart(ctx, {
         type: "line",
@@ -227,29 +226,29 @@ function createLineChartEmailTwo(emailTwoData) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                // Eliminar la configuración de datalabels
+
             },
             scales: {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#FFFFFF' // Color del texto del eje Y
+                        color: '#FFFFFF' 
                     },
                     grid: {
-                        color: '#0f113f' // Color gris para la cuadrícula
+                        color: '#0f113f' 
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#FFFFFF' // Color del texto del eje X
+                        color: '#FFFFFF' 
                     },
                     grid: {
-                        color: '#0f113f' // Color gris para la cuadrícula
+                        color: '#0f113f' 
                     }
                 }
             }
         }
-        // No es necesario incluir el plugin ChartDataLabels
+
     });
 }
 
@@ -257,10 +256,10 @@ function createLineChartViews(views) {
     const ctx = document.getElementById("LineChartViews").getContext("2d");
     destroyChart(lineChartViews);
     
-    // Extraer las fechas y los datos de registro y gracias
+
     const labels = views.map(view => view.fecha);
-    const registroData = views.map(view => view.registro || 0); // Usar 0 si no hay datos
-    const graciasData = views.map(view => view.gracias || 0); // Usar 0 si no hay datos
+    const registroData = views.map(view => view.registro || 0);
+    const graciasData = views.map(view => view.gracias || 0); 
 
     lineChartViews = new Chart(ctx, {
         type: "line",
@@ -292,23 +291,23 @@ function createLineChartViews(views) {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#FFFFFF' // Color del texto del eje Y
+                        color: '#FFFFFF'
                     },
                     grid: {
-                        color: '#0f113f' // Color gris para la cuadrícula
+                        color: '#0f113f' 
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#FFFFFF' // Color del texto del eje X
+                        color: '#FFFFFF' 
                     },
                     grid: {
-                        color: '#0f113f' // Color gris para la cuadrícula
+                        color: '#0f113f' 
                     }
                 }
             }
         }
-        // No es necesario incluir el plugin ChartDataLabels
+
     });
 }
 
@@ -344,10 +343,9 @@ function createFunnelChart(embudoData) {
         dataLabels: {
             enabled: true,
             formatter: function (val, opt) {
-                // Concatenar la etiqueta y el valor
                 const label = opt.w.globals.labels[opt.dataPointIndex];
-                const value = val; // El valor actual
-                return `${label}: ${value}`; // Formato "Etiqueta: Valor"
+                const value = val;
+                return `${label}: ${value}`; 
             },
             dropShadow: {
                 enabled: true,
@@ -357,14 +355,14 @@ function createFunnelChart(embudoData) {
             align: 'middle',
         },
         xaxis: {
-            categories: embudoData.map(item => item.etiqueta), // Usar las etiquetas del embudo
+            categories: embudoData.map(item => item.etiqueta), 
         },
         legend: {
             show: false,
         },
     };
 
-    // Aquí deberías inicializar el gráfico con las opciones
+
     const chart = new ApexCharts(document.querySelector("#funnelChart"), options);
     chart.render();
 }
