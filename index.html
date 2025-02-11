@@ -125,80 +125,71 @@
     const clicsData = emailData.map(email => email.clics || 0); // Usar 0 si no hay datos
 
     lineChartEmailOne = new Chart(ctx, {
-    type: "line",
-    data: {
-        labels: labels,
-        datasets: [
-            {
-                label: "Clics",
-                borderColor: "#59b876",
-                backgroundColor: "rgba(89,184,118,0.2)",
-                data: clicsData,
-                fill: true
-            },
-            {
-                label: "Apertura",
-                borderColor: "#3c6fe2",
-                backgroundColor: "rgba(60,111,226,0.2)",
-                data: aperturaData,
-                fill: true
-            },
-            {
-                label: "Enviados",
-                borderColor: "#cb095a",
-                backgroundColor: "rgba(203,9,90,0.2)",
-                data: enviadosData,
-                fill: true
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            // title: {
-            //     display: true,
-            //     text: 'MÉTRICAS CORREO #1', // Título del gráfico
-            //     font: {
-            //         size: 20, // Tamaño de la fuente del título
-            //         color: '#FFFFFF' // Color del texto del título
-            //     }
-            // },
-            datalabels: {
-                anchor: 'end',
-                align: 'end',
-                color: '#FFFFFF', // Color del texto de las etiquetas
-                formatter: (value) => {
-                    return value; // Mostrar el valor
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Clics",
+                    borderColor: "#59b876",
+                    backgroundColor: "rgba(89,184,118,0.2)",
+                    data: clicsData,
+                    fill: true
+                },
+                {
+                    label: "Apertura",
+                    borderColor: "#3c6fe2",
+                    backgroundColor: "rgba(60,111,226,0.2)",
+                    data: aperturaData,
+                    fill: true
+                },
+                {
+                    label: "Enviados",
+                    borderColor: "#cb095a",
+                    backgroundColor: "rgba(203,9,90,0.2)",
+                    data: enviadosData,
+                    fill: true
                 }
-            }
+            ]
         },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    color: '#FFFFFF' // Color del texto del eje Y
-                },
-                title: {
-                    display: true,
-                    text: 'Cantidad',
-                    color: '#FFFFFF' // Color del texto del título del eje Y
-                }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                // Eliminar la configuración de datalabels
             },
-            x: {
-                ticks: {
-                    color: '#FFFFFF' // Color del texto del eje X
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#FFFFFF' // Color del texto del eje Y
+                    },
+                    grid: {
+                        color: '#0f113f' // Color gris para la cuadrícula
+                    },
+                    title: {
+                        display: true,
+                        text: 'Cantidad',
+                        color: '#8c8c8c' // Color del texto del título del eje Y
+                    }
                 },
-                title: {
-                    display: true,
-                    text: 'Fechas',
-                    color: '#FFFFFF' // Color del texto del título del eje X
+                x: {
+                    ticks: {
+                        color: '#FFFFFF' // Color del texto del eje X
+                    },
+                    grid: {
+                        color: '#0f113f' // Color gris para la cuadrícula
+                    },
+                    title: {
+                        display: true,
+                        text: 'Fechas',
+                        color: '#8c8c8c' // Color del texto del título del eje X
+                    }
                 }
             }
         }
-    },
-    plugins: [ChartDataLabels] // Asegúrate de incluir el plugin aquí
-});
+        // No es necesario incluir el plugin ChartDataLabels
+    });
 }
 
 function createLineChartEmailTwo(emailTwoData) {
@@ -249,15 +240,7 @@ function createLineChartEmailTwo(emailTwoData) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                
-                datalabels: {
-                    anchor: 'end',
-                    align: 'end',
-                    color: '#FFFFFF', // Color del texto de las etiquetas
-                    formatter: (value) => {
-                        return value; // Mostrar el valor
-                    }
-                }
+                // Eliminar la configuración de datalabels
             },
             scales: {
                 y: {
@@ -265,25 +248,31 @@ function createLineChartEmailTwo(emailTwoData) {
                     ticks: {
                         color: '#FFFFFF' // Color del texto del eje Y
                     },
+                    grid: {
+                        color: '#0f113f' // Color gris para la cuadrícula
+                    },
                     title: {
                         display: true,
                         text: 'Cantidad',
-                        color: '#FFFFFF' // Color del texto del título del eje Y
+                        color: '#040627' // Color del texto del título del eje Y
                     }
                 },
                 x: {
                     ticks: {
                         color: '#FFFFFF' // Color del texto del eje X
                     },
+                    grid: {
+                        color: '#0f113f' // Color gris para la cuadrícula
+                    },
                     title: {
                         display: true,
                         text: 'Fechas',
-                        color: '#FFFFFF' // Color del texto del título del eje X
+                        color: '#040627' // Color del texto del título del eje X
                     }
                 }
             }
-        },
-        plugins: [ChartDataLabels] // Asegúrate de incluir el plugin aquí
+        }
+        // No es necesario incluir el plugin ChartDataLabels
     });
 }
 
@@ -302,7 +291,7 @@ function createLineChartViews(views) {
             labels: labels,
             datasets: [
                 {
-                    label: "Gracias",
+                    label: "Visitas",
                     borderColor: "#fcce29",
                     backgroundColor: "rgba(252,206,41,0.2)",
                     data: graciasData,
@@ -321,15 +310,6 @@ function createLineChartViews(views) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                
-                datalabels: {
-                    anchor: 'end',
-                    align: 'end',
-                    color: '#FFFFFF', // Color del texto de las etiquetas
-                    formatter: (value) => {
-                        return value; // Mostrar el valor
-                    }
-                }
             },
             scales: {
                 y: {
@@ -337,25 +317,31 @@ function createLineChartViews(views) {
                     ticks: {
                         color: '#FFFFFF' // Color del texto del eje Y
                     },
+                    grid: {
+                        color: '#0f113f' // Color gris para la cuadrícula
+                    },
                     title: {
                         display: true,
                         text: 'Cantidad',
-                        color: '#FFFFFF' // Color del texto del título del eje Y
+                        color: '#040627' // Color del texto del título del eje Y
                     }
                 },
                 x: {
                     ticks: {
                         color: '#FFFFFF' // Color del texto del eje X
                     },
+                    grid: {
+                        color: '#0f113f' // Color gris para la cuadrícula
+                    },
                     title: {
                         display: true,
                         text: 'Fechas',
-                        color: '#FFFFFF' // Color del texto del título del eje X
+                        color: '#040627' // Color del texto del título del eje X
                     }
                 }
             }
-        },
-        plugins: [ChartDataLabels] // Asegúrate de incluir el plugin aquí
+        }
+        // No es necesario incluir el plugin ChartDataLabels
     });
 }
 
