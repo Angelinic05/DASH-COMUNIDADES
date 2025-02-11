@@ -20,7 +20,7 @@
             <!-- 2. Barras de Progreso -->
         <!-- 2. Barras de Progreso -->
             <div class="box">
-                <h2 style="margin-bottom: 50px;">PARTICIPANTES EN COMUNIDADES</h2>
+                <h1>PARTICIPANTES EN COMUNIDADES</h1>
                 <div class="progress-bars-container" id="progressBarsContainer">
                     <!-- Las barras de progreso se generarán aquí -->
                 </div>
@@ -30,12 +30,15 @@
         <div class="box2">
             <div class="container-bottom">
                 <div class="box">
+                    <h2>VISITAS</h2>
                     <canvas id="LineChartViews"></canvas>
                 </div>
                 <div class="box">
+                    <h2>MÉTRICAS CORREO #1</h2>
                     <canvas id="LineChartEmailOne"></canvas>
                 </div>
                 <div class="box">
+                    <h2>MÉTRICAS CORREO #2</h2>
                     <canvas id="LineChartEmailTwo"></canvas>
                 </div>
             </div>
@@ -122,78 +125,86 @@
     const clicsData = emailData.map(email => email.clics || 0); // Usar 0 si no hay datos
 
     lineChartEmailOne = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: "Clics",
-                    borderColor: "#59b876",
-                    backgroundColor: "rgba(89,184,118,0.2)",
-                    data: clicsData,
-                    fill: true
-                },
-                {
-                    label: "Apertura",
-                    borderColor: "#3c6fe2",
-                    backgroundColor: "rgba(60,111,226,0.2)",
-                    data: aperturaData,
-                    fill: true
-                },
-                
-                {
-                    label: "Enviados",
-                    borderColor: "#cb095a",
-                    backgroundColor: "rgba(203,9,90,0.2)",
-                    data: enviadosData,
-                    fill: true
+    type: "line",
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: "Clics",
+                borderColor: "#59b876",
+                backgroundColor: "rgba(89,184,118,0.2)",
+                data: clicsData,
+                fill: true
+            },
+            {
+                label: "Apertura",
+                borderColor: "#3c6fe2",
+                backgroundColor: "rgba(60,111,226,0.2)",
+                data: aperturaData,
+                fill: true
+            },
+            {
+                label: "Enviados",
+                borderColor: "#cb095a",
+                backgroundColor: "rgba(203,9,90,0.2)",
+                data: enviadosData,
+                fill: true
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            // title: {
+            //     display: true,
+            //     text: 'MÉTRICAS CORREO #1', // Título del gráfico
+            //     font: {
+            //         size: 20, // Tamaño de la fuente del título
+            //         color: '#FFFFFF' // Color del texto del título
+            //     }
+            // },
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                color: '#FFFFFF', // Color del texto de las etiquetas
+                formatter: (value) => {
+                    return value; // Mostrar el valor
                 }
-            ]
+            }
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#FFFFFF' // Color del texto del eje Y
+                },
                 title: {
                     display: true,
-                    text: 'MÉTRICAS CORREO #1', // Título del gráfico
-                    font: {
-                        size: 20, // Tamaño de la fuente del título
-                        color: '#FFFFFF' // Color del texto del título
-                    }
+                    text: 'Cantidad',
+                    color: '#FFFFFF' // Color del texto del título del eje Y
                 }
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        color: '#FFFFFF' // Color del texto del eje Y
-                    },
-                    title: {
-                        display: true,
-                        text: 'Cantidad',
-                        color: '#FFFFFF' // Color del texto del título del eje Y
-                    }
+            x: {
+                ticks: {
+                    color: '#FFFFFF' // Color del texto del eje X
                 },
-                x: {
-                    ticks: {
-                        color: '#FFFFFF' // Color del texto del eje X
-                    },
-                    title: {
-                        display: true,
-                        text: 'Fechas',
-                        color: '#FFFFFF' // Color del texto del título del eje X
-                    }
+                title: {
+                    display: true,
+                    text: 'Fechas',
+                    color: '#FFFFFF' // Color del texto del título del eje X
                 }
             }
         }
-    });
+    },
+    plugins: [ChartDataLabels] // Asegúrate de incluir el plugin aquí
+});
 }
 
-        function createLineChartEmailTwo(emailTwoData) {
+function createLineChartEmailTwo(emailTwoData) {
     const ctx = document.getElementById("LineChartEmailTwo").getContext("2d");
     destroyChart(lineChartEmailTwo);
-    
+
     // Verificar si emailTwoData tiene datos
     if (!emailTwoData || emailTwoData.length === 0) {
         console.error("No hay datos de Email Two disponibles.");
@@ -211,7 +222,7 @@
         data: {
             labels: labels,
             datasets: [
-            {
+                {
                     label: "Clics",
                     borderColor: "#ea7329",
                     backgroundColor: "rgba(231,105,39,0.2)",
@@ -225,7 +236,6 @@
                     data: aperturaData,
                     fill: true
                 },
-                
                 {
                     label: "Enviados",
                     borderColor: "#00dffb",
@@ -239,12 +249,13 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                title: {
-                    display: true,
-                    text: 'MÉTRICAS CORREO #2', // Título del gráfico
-                    font: {
-                        size: 20, // Tamaño de la fuente del título
-                        color: '#FFFFFF' // Color del texto del título
+                
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    color: '#FFFFFF', // Color del texto de las etiquetas
+                    formatter: (value) => {
+                        return value; // Mostrar el valor
                     }
                 }
             },
@@ -271,7 +282,8 @@
                     }
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels] // Asegúrate de incluir el plugin aquí
     });
 }
 
@@ -303,19 +315,19 @@ function createLineChartViews(views) {
                     data: registroData,
                     fill: true
                 }
-                
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                title: {
-                    display: true,
-                    text: 'VISITAS', // Título del gráfico
-                    font: {
-                        size: 20, // Tamaño de la fuente del título
-                        color: '#FFFFFF' // Color del texto del título
+                
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    color: '#FFFFFF', // Color del texto de las etiquetas
+                    formatter: (value) => {
+                        return value; // Mostrar el valor
                     }
                 }
             },
@@ -342,7 +354,8 @@ function createLineChartViews(views) {
                     }
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels] // Asegúrate de incluir el plugin aquí
     });
 }
 
