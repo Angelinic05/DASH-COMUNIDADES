@@ -9,6 +9,7 @@ body {
     background-color: #010214;
     text-align: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -56,6 +57,11 @@ body {
 
 .box h1 {
     margin-bottom: 50px;
+}
+
+h3{
+    margin-top: 2%; 
+    font-size: 2.5rem;
 }
 
 
@@ -114,11 +120,11 @@ canvas {
 }
 
 .container .box {
-    height: 400px; 
+    height: 390px; 
 }
 
 .container-bottom .box {
-    height: 510px;
+    height: 410px;
 }
 
 @media (max-width: 900px) {
@@ -150,6 +156,10 @@ canvas {
         gap: 10px; 
     }
 
+    h3{
+        margin-top: 10%; 
+        font-size: 1rem;
+    }
 
     canvas {
         max-width: 100%;
