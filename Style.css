@@ -75,7 +75,7 @@ h3{
 .progress-bars {
     display: flex;
     flex-direction: column; 
-    gap: 30px; 
+    gap: 25px; 
     flex: 1; 
     min-width: 150px;
 }
